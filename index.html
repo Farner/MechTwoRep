@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Mek 2 Repetisjon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+/* Layout: one column study desk on graph paper — controls on top, a single card in focus, actions under it. */
+:root {
+  --bg: #e9eef1;
+  --grid: rgba(34, 87, 163, 0.07);
+  --surface: #ffffff;
+  --surface-2: #f4f7f9;
+  --ink: #15202a;
+  --muted: #5b6c79;
+  --line: #d2dce3;
+  --accent: #2257a3;
+  --accent-soft: #e2ebf7;
+  --ok: #2c7a4c;
+  --ok-soft: #e1f1e7;
+  --warn: #a8600a;
+  --warn-soft: #f8ead6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f151b; --grid: rgba(127, 168, 230, 0.06); --surface: #18222c; --surface-2: #1e2a35;
+    --ink: #e3eaf0; --muted: #94a5b3; --line: #2b3946; --accent: #82aae6; --accent-soft: #1f3150;
+    --ok: #6fc391; --ok-soft: #173326; --warn: #e6a650; --warn-soft: #3a2a12; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f151b; --grid: rgba(127, 168, 230, 0.06); --surface: #18222c; --surface-2: #1e2a35;
+  --ink: #e3eaf0; --muted: #94a5b3; --line: #2b3946; --accent: #82aae6; --accent-soft: #1f3150;
+  --ok: #6fc391; --ok-soft: #173326; --warn: #e6a650; --warn-soft: #3a2a12; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--f-display);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 48px;
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.course { font: 600 12px/1 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+h1 { margin: 6px 0 0; font-family: var(--f-display); font-stretch: 118%; font-weight: 800; font-size: clamp(26px, 6vw, 36px); line-height: 1.05; letter-spacing: -0.01em; text-wrap: balance; }
+.views { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); overflow: hidden; }
+.views button { border: 0; background: transparent; color: var(--muted); font: 600 13px var(--f-display); padding: 8px 14px; cursor: pointer; }
+.views button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.label { font: 600 11px/1 var(--f-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 999px; padding: 6px 11px; font: 500 13px var(--f-display); cursor: pointer; display: inline-flex; gap: 6px; align-items: baseline; }
+.chip .n { font: 500 11px var(--f-mono); color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+.chip[aria-pressed="true"] .n { color: var(--surface); opacity: 0.8; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-right: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: 500 13px var(--f-display); padding: 7px 11px; cursor: pointer; }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); font-weight: 700; }
+.spacer { flex: 1; }
+.btn { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 8px; padding: 7px 12px; font: 600 13px var(--f-display); cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn.quiet { background: transparent; color: var(--muted); }
+button:focus-visible, .card:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.progress { display: flex; flex-direction: column; gap: 6px; }
+.bar { height: 8px; border-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden; display: flex; }
+.bar span { display: block; height: 100%; transition: width .3s ease; }
+.bar .k { background: var(--ok); } .bar .o { background: var(--warn); }
+.stats { display: flex; flex-wrap: wrap; gap: 14px; font: 500 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+
+/* Card */
+.stage { perspective: 1400px; }
+.card {
+  position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: 0 1px 0 var(--line), 0 14px 30px -18px rgba(20, 40, 70, 0.35);
+  min-height: 300px; padding: 22px 24px 26px; cursor: pointer; display: flex; flex-direction: column; gap: 14px;
+  transition: transform .16s ease-in;
+}
+.card.turn { transform: rotateX(90deg); }
+.card .top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.side { font: 600 11px var(--f-mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 8px; border-radius: 5px; background: var(--accent-soft); color: var(--accent); }
+.card.back .side { background: var(--ok-soft); color: var(--ok); }
+.chap { font: 500 12px var(--f-mono); color: var(--muted); }
+.q { font-family: var(--f-body); font-size: clamp(20px, 4.6vw, 25px); line-height: 1.35; font-weight: 600; text-wrap: balance; margin: auto 0; }
+.a { font-family: var(--f-body); font-size: 17px; line-height: 1.6; }
+.a p { margin: 0 0 10px; } .a p:last-child { margin-bottom: 0; }
+.a ul { margin: 0 0 10px; padding-left: 20px; } .a li { margin-bottom: 4px; }
+.qsmall { font: 600 14px/1.4 var(--f-body); color: var(--muted); border-bottom: 1px dashed var(--line); padding-bottom: 10px; }
+.f { display: block; font-family: var(--f-mono); font-size: 14.5px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; margin: 6px 0 10px; overflow-x: auto; white-space: nowrap; }
+.hint { font: 500 12px var(--f-mono); color: var(--muted); text-align: center; }
+.status-pill { font: 600 11px var(--f-mono); padding: 3px 8px; border-radius: 999px; letter-spacing: .04em; }
+.status-pill.kan { background: var(--ok-soft); color: var(--ok); }
+.status-pill.ov { background: var(--warn-soft); color: var(--warn); }
+
+.actions { display: grid; grid-template-columns: auto 1fr 1fr auto; gap: 10px; align-items: stretch; }
+.nav { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 10px; width: 48px; font: 700 18px var(--f-display); cursor: pointer; }
+.nav:disabled { opacity: .35; cursor: default; }
+.mark { border-radius: 10px; padding: 13px 10px; font: 700 15px var(--f-display); cursor: pointer; border: 1.5px solid; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mark small { font: 500 11px var(--f-mono); opacity: .8; }
+.mark.ov { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.mark.kan { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.counter { font: 600 13px var(--f-mono); color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+
+.done { text-align: center; align-items: center; padding: 30px 20px; }
+.done h2 { margin: 0; font-stretch: 115%; font-size: 24px; }
+.done p { margin: 0; color: var(--muted); font-family: var(--f-body); font-size: 16px; }
+
+/* List */
+.list { display: flex; flex-direction: column; gap: 8px; }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.item summary { list-style: none; cursor: pointer; padding: 13px 14px; display: flex; gap: 10px; align-items: baseline; }
+.item summary::-webkit-details-marker { display: none; }
+.item summary .t { font: 600 15.5px/1.4 var(--f-body); flex: 1; min-width: 0; }
+.item summary .c { font: 500 11px var(--f-mono); color: var(--muted); white-space: nowrap; }
+.item .body { padding: 0 14px 14px; border-top: 1px dashed var(--line); padding-top: 12px; }
+.listhead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.confirm { display: inline-flex; gap: 6px; align-items: center; font: 500 12px var(--f-mono); color: var(--muted); }
+footer { font: 500 12px/1.6 var(--f-mono); color: var(--muted); }
+kbd { font: 500 11px var(--f-mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 1px 5px; background: var(--surface); color: var(--ink); }
+
+@media (max-width: 520px) {
+  .actions { grid-template-columns: 1fr 1fr; }
+  .actions .nav { width: auto; padding: 10px; }
+  .actions .nav.prev { order: 3; } .actions .nav.next { order: 4; }
+  .card { padding: 18px 16px 20px; min-height: 260px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card, .bar span { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="course">TKT4122 Mekanikk 2</div>
+      <h1>Repetisjonsspørsmål</h1>
+    </div>
+    <div class="views" role="group" aria-label="Visning">
+      <button id="v-kort" aria-pressed="true">Kort</button>
+      <button id="v-liste" aria-pressed="false">Liste</button>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="Utvalg">
+    <div class="label">Kapitler</div>
+    <div class="row" id="chips"></div>
+    <div class="row">
+      <div class="seg" role="group" aria-label="Hvilke kort">
+        <button id="f-alle" aria-pressed="true">Alle</button>
+        <button id="f-ov" aria-pressed="false">Øv mer</button>
+        <button id="f-ny" aria-pressed="false">Ikke vurdert</button>
+      </div>
+      <span class="spacer"></span>
+      <button class="btn" id="shuffle">Stokk</button>
+      <button class="btn quiet" id="order">Rekkefølge</button>
+    </div>
+    <div class="progress">
+      <div class="bar" aria-hidden="true"><span class="k" id="bar-k"></span><span class="o" id="bar-o"></span></div>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <main id="kortvisning">
+    <div class="stage">
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Snu kortet"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="actions" id="actions">
+      <button class="nav prev" id="prev" aria-label="Forrige kort">←</button>
+      <button class="mark ov" id="m-ov">Øv mer<small>tast 1</small></button>
+      <button class="mark kan" id="m-kan">Kan<small>tast 2</small></button>
+      <button class="nav next" id="next" aria-label="Neste kort">→</button>
+    </div>
+    <div style="height:10px"></div>
+    <div class="counter" id="counter"></div>
+    <div class="hint"><kbd>Mellomrom</kbd> snu · <kbd>←</kbd> <kbd>→</kbd> bla · <kbd>1</kbd> øv mer · <kbd>2</kbd> kan</div>
+  </main>
+
+  <main id="listevisning" hidden>
+    <div class="listhead">
+      <span class="label" id="listcount"></span>
+      <div class="row">
+        <button class="btn quiet" id="openall">Vis alle svar</button>
+        <button class="btn quiet" id="closeall">Skjul alle</button>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="list" id="list"></div>
+  </main>
+
+  <footer>
+    <div class="row">
+      <span>Svarene er hentet fra forelesningsnotatene (kap. 1–11). Kap. 5 Komposittbjelker har ingen repetisjonsspørsmål.</span>
+      <span class="spacer"></span>
+      <span id="reset-wrap"><button class="btn quiet" id="reset">Nullstill fremgang</button></span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const KAP = {
+  1: "Repetisjon fra Mekanikk 1",
+  2: "Statisk ubestemte systemer",
+  3: "Skjærspenning i bjelker",
+  6: "Knekning",
+  7: "Rør og beholdere",
+  8: "Spenningsanalyse",
+  9: "Tøyningsanalyse",
+  10: "Materialligninger",
+  11: "Plastisitetsmoment"
+};
+
+const F = s => `<span class="f">${s}</span>`;
+
+const DATA = [
+// Kap 1
+{k:1,q:"Hvordan defineres normalspenning σ og skjærspenning τ?",a:`
+<p><b>Normalspenning</b> er kraft normalt på en flate delt på arealet:</p>${F("σ = N / A")}
+<p><b>Skjærspenning</b> virker parallelt med flaten den virker på. Midlere verdi pga. skjærkraft:</p>${F("τ<sub>midl</sub> = V / A")}
+<p>Enhet for begge: N/mm² = MPa.</p>`},
+{k:1,q:"Hvordan defineres lengdetøyning ε og skjærtøyning γ?",a:`
+<p><b>Lengdetøyning</b> er relativ lengdeendring, og er dimensjonsløs:</p>${F("ε = ΔL / L<sub>0</sub>")}
+<p><b>Skjærtøyning</b> er vinkelendringen (i radianer) mellom to linjer som sto vinkelrett på hverandre før deformasjon:</p>${F("γ<sub>xy</sub> = ∂u/∂y + ∂v/∂x")}`},
+{k:1,q:"Hva forstår vi med lineær elastisitet? Formuler Hookes lov.",a:`
+<p>Lineær elastisitet betyr en <b>lineær og reversibel</b> sammenheng mellom spenning og tøyning. Ved avlastning går materialet tilbake til opprinnelig form. Gjelder opp til flytespenningen f<sub>y</sub>.</p>
+<p>Hookes lov:</p>${F("σ = E·ε &nbsp;&nbsp;&nbsp; τ = G·γ")}
+<p>Tverrtøyning: ε<sub>t</sub> = −ν·ε</p>`},
+{k:1,q:"Hvordan beregner vi spenning og deformasjon pga. aksialkraft (N), bøyemoment (M) og torsjonsmoment (M<sub>x</sub> = T)?",a:`
+<ul>
+<li><b>N:</b> σ = N/A, forlengelse ΔL = N·L/(E·A)</li>
+<li><b>M:</b> σ = (M/I)·z, krumning 1/ρ = M/(EI), elastisk linje w'' = −M/(EI)</li>
+<li><b>T:</b> τ = (T/I<sub>p</sub>)·r, torsjonsvinkel φ = T·L/(G·I<sub>p</sub>)</li>
+</ul>
+<p>I<sub>p</sub> = πR⁴/2 for massivt tverrsnitt, I<sub>p</sub> ≈ 2πR³t for tynnvegget.</p>`},
+{k:1,q:"Hvordan bestemmer vi beliggenheten til arealsenteret av et tverrsnitt?",a:`
+<ul>
+<li>Regn ut arealet A</li>
+<li>Velg et foreløpig origo</li>
+<li>Regn første arealmoment om origo: S<sub>y</sub> = Σ A<sub>i</sub>·z<sub>i</sub> (og S<sub>z</sub> = Σ A<sub>i</sub>·y<sub>i</sub>)</li>
+<li>Arealsenteret ligger der:</li>
+</ul>${F("z<sub>C</sub> = S<sub>y</sub> / A &nbsp;&nbsp;&nbsp; y<sub>C</sub> = S<sub>z</sub> / A")}`},
+{k:1,q:"Hvordan regner vi ut andre arealmoment av et tverrsnitt?",a:`
+<p>Om aksen gjennom arealsenteret C:</p>${F("I<sub>y</sub> = ∫ z² dA")}
+<p>For sammensatte tverrsnitt med Steiners sats (lokal I + flytteledd):</p>${F("I<sub>y</sub> = Σ ( I<sub>y,lokal</sub> + e²·A )")}
+<p>Rektangel: I = b·h³/12.</p>`},
+{k:1,q:"Hvordan bestemmer vi lastvirkningsdiagrammene (N, V, M) til en konstruksjon? Hva bruker vi diagrammene til?",a:`
+<ul>
+<li>Regn ut alle lagerreaksjoner og leddkrefter</li>
+<li>Snitt, tegn fritt-legeme-diagram og finn N(x), V(x), M(x) fra likevekt</li>
+<li>Kontroll: dM/dx = V og dV/dx = −q. M er maks der V = 0</li>
+<li>M tegnes på strekksiden</li>
+</ul>
+<p>Diagrammene viser kraftflyten i konstruksjonen og er basis for all dimensjonering (kapasitet og deformasjoner).</p>`},
+{k:1,q:"Hva er forutsetningene for lineær (teknisk) bjelketeori?",a:`
+<ul>
+<li><b>Navier (Bernoulli):</b> plane tverrsnitt forblir plane og normalt på bjelkeaksen</li>
+<li><b>Enaksiell spenningstilstand:</b> neglisjerer spenninger i y- og z-retning</li>
+<li><b>Lineært elastisk materiale:</b> σ = E·ε gjelder</li>
+<li><b>Små helninger:</b> dw/dx ≪ 1, linearisert krumning</li>
+</ul>
+<p>I tillegg: rett bjelke, tverrsnitt symmetrisk om z-aksen, og last i z-retning (bøying om y).</p>`},
+{k:1,q:"Hva forstår vi med krumning? Hvilken sammenheng har vi mellom moment og krumning?",a:`
+<p>Krumning κ = 1/ρ sier hvor mye bjelkeaksen bøyer seg (ρ er krumningsradius). Med små helninger:</p>${F("κ = 1/ρ = −d²w/dx²")}
+<p>Moment-krumningsrelasjonen:</p>${F("1/ρ = M / (E·I)")}`},
+
+// Kap 2
+{k:2,q:"Hva er kriteriet for at en konstruksjon er statisk (u)bestemt?",a:`
+<p>Sammenlign antall likevektsligninger (LVL) med antall ukjente (UKJ). En plan konstruksjon har 3 LVL.</p>
+<ul>
+<li>LVL = UKJ → <b>statisk bestemt</b></li>
+<li>LVL &lt; UKJ → <b>statisk ubestemt</b></li>
+<li>LVL &gt; UKJ → statisk underbestemt (ustabilt system)</li>
+</ul>`},
+{k:2,q:"I en statisk ubestemt konstruksjon er det «for få» likevektsligninger. Hvordan skaffer vi oss ekstra ligning(er)?",a:`
+<p>Fra <b>kompatibilitetskrav</b>. De ekstra fastholdingene gir geometriske føringer på hvordan konstruksjonen kan deformere seg, for eksempel null forskyvning i et opplager. Hver slik betingelse gir én ekstra ligning.</p>`},
+{k:2,q:"Hva forstår vi med et statisk bestemt grunnsystem?",a:`
+<p>Systemet vi får når vi fjerner nok ukjente (opplagerkrefter eller -momenter) til at konstruksjonen blir statisk bestemt. De fjernede ukjente gjeninnføres etterpå som ytre krefter, én av gangen. Det finnes ofte flere mulige valg.</p>`},
+{k:2,q:"Hva forstår vi med kompatibilitet?",a:`
+<p>At deformasjonene henger sammen med konstruksjonens geometriske betingelser (randkrav). Total deformasjon fra grunnsystemet med ytre last pluss de ukjente kreftene skal stemme med det opplagrene tillater.</p>
+<p>Eksempel: Δ<sub>0</sub> = Δ<sub>1</sub> gir null forskyvning i B.</p>`},
+{k:2,q:"Hvordan påvirkes responsen i et statisk ubestemt system av at en av komponentene får endret bøyestivhet EI? Hva hvis systemet er statisk bestemt?",a:`
+<p><b>Statisk ubestemt:</b> kreftene og momentene fordeler seg etter stivhet. Endret EI gir endrede lagerreaksjoner og lastvirkningsdiagrammer.</p>
+<p><b>Statisk bestemt:</b> ingen påvirkning på kreftene, siden de finnes fra likevekt alene. Bare deformasjonene endres.</p>`},
+{k:2,q:"Hva forstår vi med en støttesenkning? Hva slags konsekvens får vi i et statisk ubestemt system? Hva hvis systemet er statisk bestemt?",a:`
+<p>En støttesenkning (fundamentsetning) er at et opplager forskyves, for eksempel synker en avstand s.</p>
+<p><b>Statisk ubestemt:</b> gir <b>tvangskrefter og -momenter</b>.</p>
+<p><b>Statisk bestemt:</b> ingen påvirkning på kreftene.</p>`},
+{k:2,q:"Hva er konsekvensen av temperaturendring i et statisk ubestemt system? Hva hvis systemet er statisk bestemt?",a:`
+<p><b>Statisk ubestemt:</b> den termiske utvidelsen (ε<sub>T</sub> = α·ΔT) blir hindret, og det oppstår <b>tvangskrefter og -momenter</b>.</p>
+<p><b>Statisk bestemt:</b> konstruksjonen kan utvide seg fritt. Ingen krefter oppstår.</p>`},
+
+// Kap 3
+{k:3,q:"Hva er ulempe(ne) med formelen for midlere skjærspenning pga. V?",a:`
+${F("τ<sub>midl</sub> = V / A")}
+<p>Den antar jevn fordeling over tverrsnittet. Det er feil, fordi τ = 0 på fri overflate og skjærspenningene opptrer parvis. Den gir ikke riktig bilde av fordelingen og undervurderer maksverdien. For rektangel er τ<sub>max</sub> = 1,5·τ<sub>midl</sub>.</p>
+<p>Kan brukes til overslagsberegninger.</p>`},
+{k:3,q:"Hva forstår vi med akseparallell skjærstrøm? Hvorfor er det viktig at et tverrsnitt kan ivareta akseparallell skjærstrøm?",a:`
+<p>Skjærkraft per lengde langs bjelkeaksen [N/mm]:</p>${F("q<sub>V</sub> = V·S'<sub>y</sub> / I<sub>y</sub>")}
+<p>Den oppstår fordi M og dermed σ endres langs bjelken. q<sub>V</sub> trengs for likevekt i x-retning.</p>
+<p>Sammensatte tverrsnitt (sveis, plugger, lim) må kunne overføre den. Ellers glir delene i forhold til hverandre, og bjelken får mye mindre stivhet og kapasitet.</p>`},
+{k:3,q:"Hvordan beregner vi skjærspenning pga. V?",a:`
+${F("τ = V·S'<sub>y</sub> / (I<sub>y</sub>·b)")}
+<ul>
+<li>S'<sub>y</sub>: første arealmoment om nøytralaksen av arealet A' mellom fri flate (τ = 0) og snittet. Ofte S' = A'·arm</li>
+<li>I<sub>y</sub>: andre arealmoment for hele tverrsnittet</li>
+<li>b: bredden i snittet</li>
+</ul>`},
+{k:3,q:"Skjærspenningene pga. V er lineære i tverrsnittsdeler som er orientert vinkelrett på V. Hvorfor?",a:`
+<p>I en flens (vinkelrett på V) ligger hele det utsnittede arealet i samme avstand fra nøytralaksen. Armen er konstant, mens arealet A' vokser lineært med lengden du snitter inn. Da blir S' = A'·arm lineær, og dermed også τ.</p>`},
+{k:3,q:"Skjærspenningene pga. V har parabel-fordeling i tverrsnittsdeler som ikke er orientert vinkelrett på V. Hvorfor?",a:`
+<p>I et steg (eller en skrå del) endres både arealet A' og armen til arealsenteret når du flytter snittet. S' blir et produkt av to størrelser som begge varierer lineært, altså en andregradsfunksjon. Derfor blir τ en parabel.</p>`},
+{k:3,q:"Hvorfor er skjærspenningen lik null på tuppen av en flens?",a:`
+<p>Tuppen er en fri, ubelastet overflate, og der er τ alltid null. I formelen ser du det ved at utsnittet areal A' = 0, så S' = 0 og τ = 0.</p>`},
+{k:3,q:"Hvor finner vi den maksimale skjærspenningen?",a:`
+<p>Som regel i <b>nøytralaksen</b>, fordi S' er størst der. Husk å sjekke hjørner og overganger, og steder der bredden b er liten.</p>
+<p>Rektangel: τ<sub>max</sub> = 3V/(2bh) i nøytralaksen.</p>`},
+
+// Kap 6
+{k:6,q:"Hva forstår vi med knekning? Hva slags lastvirkning forårsaker knekning?",a:`
+<p>Knekning er at trykkpåkjente komponenter får store sideveis deformasjoner. Det forårsakes av <b>trykkraft</b>.</p>`},
+{k:6,q:"Hvilke forutsetninger ligger til grunn for Eulers formel for elastisk knekklast? Hvorfor kommer vi til kort med lineær bjelketeori?",a:`
+${F("P<sub>kr</sub> = π²·E·I / L<sub>k</sub>²")}
+<p>Forutsetninger: lineært elastisk materiale, konstant bøyestivhet, ingen aksialdeformasjon, sentrisk last, konstant aksialkraft og ingen formfeil.</p>
+<p>Lineær (1. ordens) teori ser på likevekt i udeformert geometri. Ved knekning må vi se på likevekt i <b>utbøyd tilstand</b>, der kraften P får en momentarm. Det krever 2. ordens teori.</p>`},
+{k:6,q:"Hva forstår vi med knekklengde? Er det fordelaktig med stor eller liten knekklengde?",a:`
+<p>Knekklengden L<sub>k</sub> er avstanden mellom momentfrie punkter (vendepunkter) i søylen. Eulerstav: L<sub>k</sub> = L. Utkrager: L<sub>k</sub> = 2L.</p>
+<p><b>Liten knekklengde er fordelaktig</b>, siden P<sub>kr</sub> = π²EI/L<sub>k</sub>² blir større.</p>`},
+{k:6,q:"Hva er hensikten med en avstivning?",a:`
+<p>Å hindre knekkformen med lavest knekklast. Det gir kortere knekklengde og høyere knekklast.</p>
+<p>Eulerstav avstivet på midten: P<sub>kr</sub> = 4·P<sub>E</sub>.</p>`},
+{k:6,q:"Elastisk knekklast beregnet med Eulers formel overvurderer den reelle kapasiteten til en komponent. Hvorfor?",a:`
+<ul>
+<li>Formfeil</li>
+<li>Eksentrisk last</li>
+<li>Flytning</li>
+<li>Egenspenninger (stål)</li>
+</ul>
+<p>Formfeil og eksentrisitet gir et moment som gir utbøyning allerede før P<sub>kr</sub> er nådd.</p>`},
+
+// Kap 7
+{k:7,q:"Vi forutsetter tynnveggede rør og beholdere i Mekanikk 2. Hva forstår vi med tynnvegget?",a:`
+${F("t ≤ r / 10")}
+<p>der r er middelradien, r = (r<sub>i</sub> + r<sub>y</sub>)/2. Da neglisjerer vi spenningen i radiell retning, σ<sub>r</sub> ≈ 0. Feilen er under 5 % når r/t &gt; 10.</p>`},
+{k:7,q:"Når blir det strekk i beholderveggen? Eller trykk?",a:`
+<p>Overtrykk p = p<sub>i</sub> − p<sub>y</sub>.</p>
+<ul>
+<li><b>Indre overtrykk (p &gt; 0):</b> beholderen utvider seg, <b>strekk</b> i veggen</li>
+<li><b>Ytre overtrykk (p &lt; 0):</b> beholderen trekker seg sammen, <b>trykk</b> i veggen. Utsatt for knekking</li>
+</ul>`},
+{k:7,q:"Hvilken spenningskomponent er størst i en sirkulærsylindrisk beholder, aksialspenningen eller ringspenningen?",a:`
+<p><b>Ringspenningen</b>, den er dobbelt så stor:</p>${F("σ<sub>θ</sub> = p·r / t &nbsp;&nbsp;&nbsp; σ<sub>z</sub> = p·r / (2t)")}
+<p>Derfor oppstår brudd i langsgående retning. (Kuleskall: σ<sub>θ</sub> = p·r/(2t) i alle retninger.)</p>`},
+
+// Kap 8
+{k:8,q:"Hvor mange spenningskomponenter har vi i en 3D spenningstilstand?",a:`
+<p>På kuben virker 3 komponenter per flate (én normalspenning og to skjærspenninger). På grunn av symmetri er det <b>6 uavhengige</b>:</p>${F("σ<sub>x</sub>, σ<sub>y</sub>, σ<sub>z</sub>, τ<sub>xy</sub>, τ<sub>yz</sub>, τ<sub>zx</sub>")}`},
+{k:8,q:"Noen av spenningskomponentene er identiske. Hvilke? Hvorfor?",a:`
+${F("τ<sub>xy</sub> = τ<sub>yx</sub> &nbsp; τ<sub>yz</sub> = τ<sub>zy</sub> &nbsp; τ<sub>zx</sub> = τ<sub>xz</sub>")}
+<p>Det følger av <b>momentlikevekt</b> for et lite element: skjærspenningenes parvise opptreden.</p>`},
+{k:8,q:"Hva forstår vi med plan spenningstilstand? Når har vi typisk en plan spenningstilstand?",a:`
+<p>Alle spenningskomponenter på en flate er (tilnærmet) null:</p>${F("σ<sub>z</sub> = τ<sub>xz</sub> = τ<sub>yz</sub> = 0")}
+<p>Da er det bare 3 komponenter igjen: σ<sub>x</sub>, σ<sub>y</sub>, τ<sub>xy</sub>.</p>
+<p>Typisk i tynne plater med last i sitt eget plan, og i tynnveggede rør og beholdere.</p>`},
+{k:8,q:"Hva forstår vi med spenningstransformasjon?",a:`
+<p>Å finne spenningskomponentene i et rotert koordinatsystem x'y' (vinkel θ, positiv mot klokka). Spenningene i et punkt er de samme, men komponentene avhenger av hvilket system vi ser dem i.</p>
+${F("σ<sub>x'</sub> = σ<sub>x</sub>cos²θ + σ<sub>y</sub>sin²θ + 2τ<sub>xy</sub>sinθcosθ")}`},
+{k:8,q:"Hva forstår vi med en hovedspenning? Og en hovedspenningsretning?",a:`
+<p><b>Hovedspenningene</b> er ekstremalverdiene (maks og min) av normalspenningen. De opptrer der skjærspenningen er null, τ<sub>x'y'</sub> = 0.</p>
+<p><b>Hovedspenningsretningene</b> er retningene der dette skjer.</p>
+${F("σ<sub>1,2</sub> = (σ<sub>x</sub>+σ<sub>y</sub>)/2 ± √[((σ<sub>x</sub>−σ<sub>y</sub>)/2)² + τ<sub>xy</sub>²]")}
+${F("tan 2θ<sub>σ</sub> = 2τ<sub>xy</sub> / (σ<sub>x</sub>−σ<sub>y</sub>)")}`},
+{k:8,q:"Hvordan bestemmer vi størrelsen og retningen til den maksimale skjærspenningen?",a:`
+${F("τ<sub>max</sub> = √[((σ<sub>x</sub>−σ<sub>y</sub>)/2)² + τ<sub>xy</sub>²] = (σ<sub>1</sub>−σ<sub>2</sub>)/2")}
+<p>Den virker på et plan som står <b>45°</b> på hovedspenningsretningene: tan 2θ<sub>τ</sub> = (σ<sub>y</sub>−σ<sub>x</sub>)/(2τ<sub>xy</sub>). Normalspenningen der er (σ<sub>x</sub>+σ<sub>y</sub>)/2.</p>
+<p>Absolutt maksimal: τ<sub>abs,max</sub> = (σ<sub>max</sub> − σ<sub>min</sub>)/2, der σ<sub>3</sub> = 0 tas med.</p>`},
+
+// Kap 9
+{k:9,q:"Hvilke tøyningskomponenter er relatert til hhv. lengdeendring og vinkelendring?",a:`
+<p><b>Normaltøyninger</b> ε<sub>x</sub>, ε<sub>y</sub>, ε<sub>z</sub> → lengdeendring.</p>
+<p><b>Skjærtøyninger</b> γ<sub>xy</sub>, γ<sub>yz</sub>, γ<sub>zx</sub> → vinkelendring.</p>`},
+{k:9,q:"Hva forstår vi med plan spenningstilstand? Når har vi typisk en plan tøyningstilstand?",a:`
+<p><b>Plan spenning:</b> σ<sub>z</sub> = τ<sub>xz</sub> = τ<sub>yz</sub> = 0. Typisk tynne plater og tynnveggede beholdere.</p>
+<p><b>Plan tøyning:</b> alle tøyningskomponenter i én retning er null, ε<sub>z</sub> = γ<sub>yz</sub> = γ<sub>zx</sub> = 0. Typisk i <b>lange konstruksjoner</b> belastet på tvers av lengderetningen, for eksempel demninger og tunneler.</p>
+<p>De to opptrer generelt ikke samtidig.</p>`},
+{k:9,q:"Hva forstår vi med tøyningstransformasjon?",a:`
+<p>Å finne tøyningskomponentene i et rotert koordinatsystem. Formlene kommer fra geometri, og har samme form som for spenninger:</p>
+${F("ε(θ) = ε<sub>x</sub>cos²θ + ε<sub>y</sub>sin²θ + γ<sub>xy</sub>sinθcosθ")}
+<p>Summen ε<sub>x</sub> + ε<sub>y</sub> er den samme i alle systemer.</p>`},
+{k:9,q:"Hva forstår vi med en hovedtøyning? Og en hovedtøyningsretning?",a:`
+<p><b>Hovedtøyningene</b> er de største og minste normaltøyningene. De opptrer der γ<sub>x'y'</sub> = 0. <b>Hovedtøyningsretningene</b> er retningene der dette skjer.</p>
+${F("ε<sub>1,2</sub> = (ε<sub>x</sub>+ε<sub>y</sub>)/2 ± √[((ε<sub>x</sub>−ε<sub>y</sub>)/2)² + (γ<sub>xy</sub>/2)²]")}
+${F("tan 2θ<sub>ε</sub> = γ<sub>xy</sub> / (ε<sub>x</sub>−ε<sub>y</sub>)")}`},
+{k:9,q:"Hvordan bestemmer vi størrelsen og retningen til den maksimale skjærtøyningen?",a:`
+${F("γ<sub>max</sub>/2 = √[((ε<sub>x</sub>−ε<sub>y</sub>)/2)² + (γ<sub>xy</sub>/2)²] = (ε<sub>1</sub>−ε<sub>2</sub>)/2")}
+<p>Retningen ligger <b>45°</b> fra hovedtøyningsretningene: tan 2θ<sub>γ</sub> = −(ε<sub>x</sub>−ε<sub>y</sub>)/γ<sub>xy</sub>.</p>
+<p>Absolutt maksimal: γ<sub>abs,max</sub> = ε<sub>max</sub> − ε<sub>min</sub>.</p>`},
+{k:9,q:"Hvordan kan vi måle tøyninger?",a:`
+<ul>
+<li><b>Strekklapper:</b> måler normaltøyning i én retning via endret elektrisk motstand. En rosett med tre retninger gir ε<sub>x</sub>, ε<sub>y</sub> og γ<sub>xy</sub>.</li>
+<li><b>Ekstensometer</b></li>
+<li><b>DIC</b> (Digital Image Correlation): kamera og mønster gir hele tøyningsfeltet</li>
+</ul>
+<p>Alle metodene måler i overflaten av materialet.</p>`},
+
+// Kap 10
+{k:10,q:"Hva forstår vi med en konstitutiv ligning?",a:`
+<p>En ligning som angir sammenhengen mellom <b>spenninger og tøyninger</b> i et materiale.</p>`},
+{k:10,q:"Det finnes mange konstitutive ligninger, hvorav én benyttes i Mekanikk 2. Hvilken?",a:`
+<p><b>Hookes lov</b>: lineær elastisk materialoppførsel for homogene og isotrope materialer.</p>`},
+{k:10,q:"Hvordan er skjærmodulen G relatert til elastisitetsmodulen E og tverrkontraksjonstallet ν?",a:`
+${F("G = E / ( 2(1 + ν) )")}
+<p>Stål: E = 210 000 MPa og ν = 0,3 gir G ≈ 81 000 MPa.</p>`},
+{k:10,q:"Hva er forutsetningen for at vi i Mekanikk 2 kan nøye oss med to uavhengige materialparametre (E og ν)? Gjelder denne forutsetningen for alle materialer?",a:`
+<p>At materialet er <b>isotropt</b> (like egenskaper i alle retninger) og homogent.</p>
+<p>Nei. Tre er for eksempel <b>ortotropt</b>, med ulike egenskaper langs og på tvers av fibrene. Da trengs flere parametre, som E<sub>x</sub>, E<sub>y</sub>, ν<sub>x</sub>, ν<sub>y</sub>.</p>`},
+{k:10,q:"Hvor mange ligninger består Hookes lov av i 3D spenningstilstand? Og dersom vi har plan spenning eller plan tøyning?",a:`
+<p><b>3D:</b> 6 ligninger, tre for normaltøyningene og tre for skjærtøyningene.</p>
+<p><b>Plan spenning og plan tøyning:</b> 3 ligninger i planet (ε<sub>x</sub>, ε<sub>y</sub>, γ<sub>xy</sub>).</p>
+<p>I plan spenning er σ<sub>z</sub> = 0, men ε<sub>z</sub> = −(ν/E)(σ<sub>x</sub>+σ<sub>y</sub>). I plan tøyning er ε<sub>z</sub> = 0, men σ<sub>z</sub> = ν(σ<sub>x</sub>+σ<sub>y</sub>).</p>`},
+{k:10,q:"Hva forstår vi med et flytekriterium?",a:`
+<p>Et kriterium for å avgjøre om det blir <b>flytning</b> eller ikke i en kombinert spenningstilstand. Det sammenligner spenningstilstanden med flytespenningen f<sub>y</sub> fra enakset strekk.</p>`},
+{k:10,q:"Det finnes mange flytekriterier, hvorav ett benyttes i Mekanikk 2. Hvilket?",a:`
+<p><b>Mises-kriteriet</b>. Det brukes også i regelverket for stålkonstruksjoner.</p>
+<p>Tresca nevnes også i pensum. Det ligger innenfor Mises og er mer konservativt.</p>`},
+{k:10,q:"Hva forstår vi med jevnføringsspenning?",a:`
+<p>En enkelt spenning som representerer hele den kombinerte spenningstilstanden, slik at den kan sammenlignes direkte med f<sub>y</sub>. Flyt starter når σ<sub>j</sub> = f<sub>y</sub>.</p>
+${F("σ<sub>j</sub> = √(σ<sub>x</sub>² + σ<sub>y</sub>² − σ<sub>x</sub>σ<sub>y</sub> + 3τ<sub>xy</sub>²)")}
+<p>Sikkerhetsfaktor mot flyt: n = f<sub>y</sub> / σ<sub>j</sub>.</p>`},
+
+// Kap 11
+{k:11,q:"Hva er forskjellen på elastisk og plastisk materialoppførsel?",a:`
+<p><b>Elastisk:</b> lineær sammenheng σ = Eε, små tøyninger, alle deformasjoner er reversible. Slutter når σ = f<sub>y</sub>.</p>
+<p><b>Plastisk:</b> starter når σ &gt; f<sub>y</sub>. Store tøyninger uten særlig økning i spenning. Deformasjonene er <b>permanente</b>. Ved avlastning følger materialet E-modulen tilbake.</p>`},
+{k:11,q:"Hva vil det si at et materiale har en duktil oppførsel? Hvilke materialer er vanligvis duktile? Og hvilke er sprø?",a:`
+<p><b>Duktilt:</b> store plastiske deformasjoner før brudd. Eksempler: konstruksjonsstål, aluminium, kobber.</p>
+<p><b>Sprøtt:</b> små plastiske deformasjoner før brudd. Eksempler: glass, keramikk, betong i strekk, støpejern.</p>`},
+{k:11,q:"Hva forstår vi med en elastisk – perfekt plastisk materialkurve? Og en stiv – perfekt plastisk materialkurve?",a:`
+<p><b>Elastisk – perfekt plastisk:</b> lineært elastisk frem til f<sub>y</sub>, deretter konstant σ = f<sub>y</sub>. Ingen fastning.</p>
+<p><b>Stiv – perfekt plastisk:</b> elastiske deformasjoner neglisjeres (materialet er stivt før flyt), deretter konstant σ = f<sub>y</sub>. Nyttig når vi beregner fullt plastifisert kapasitet.</p>`},
+{k:11,q:"Hvordan er fordelingen av normalspenninger pga. bøyemoment i et tverrsnitt som er fullstendig plastifisert? Og hvis tverrsnittet er delvis plastifisert?",a:`
+<p><b>Fullstendig plastifisert:</b> σ = f<sub>y</sub> i hele strekksonen og −f<sub>y</sub> i hele trykksonen. To konstante blokker.</p>
+<p><b>Delvis plastifisert:</b> ytterst er σ = f<sub>y</sub>. Innenfor er en elastisk kjerne der spenningen varierer lineært.</p>`},
+{k:11,q:"Hvordan bestemmer vi beliggenheten til plastisk nøytralakse i et enkeltsymmetrisk tverrsnitt?",a:`
+<p>Fra aksialkraftlikevekt: den plastiske nøytralaksen deler tverrsnittet i to <b>like store arealer</b>.</p>${F("A<sub>trykk</sub> = A<sub>strekk</sub>")}
+<p>Den faller derfor generelt ikke sammen med den elastiske nøytralaksen (arealsenteret).</p>`},
+{k:11,q:"Hvordan beregner vi den plastiske momentkapasiteten?",a:`
+${F("M<sub>pl,y</sub> = f<sub>y</sub> · W<sub>pl,y</sub> &nbsp;&nbsp;&nbsp; W<sub>pl,y</sub> = Σ A<sub>i</sub>·a<sub>i</sub>")}
+<p>a<sub>i</sub> er avstanden fra den plastiske nøytralaksen til arealsenteret til hver del. Rektangel: W<sub>pl</sub> = b·h²/4.</p>`},
+{k:11,q:"Hvorfor er duktilitet viktig når vi skal utnytte plastisk momentkapasitet?",a:`
+<p>For å nå full plastifisering må de ytterste fibrene tøyes langt forbi flytetøyningen mens resten av tverrsnittet flyter. Bare et duktilt materiale tåler disse store plastiske tøyningene uten å briste. Et sprøtt materiale ville gått til brudd før kapasiteten var utnyttet.</p>`},
+{k:11,q:"Hva forstår vi med en formfaktor?",a:`
+${F("f = M<sub>pl,y</sub> / M<sub>el,y</sub> = W<sub>pl,y</sub> / W<sub>el,y</sub>")}
+<p>Forholdet mellom plastisk og elastisk momentkapasitet. Den beskriver tverrsnittets plastiske momentreserve. Rektangel: f = 1,5.</p>`}
+];
+DATA.forEach((d, i) => d.id = i);
+
+// ---- state ----
+const LS = "mek2-rep-status-v1";
+let status = {};
+try { status = JSON.parse(localStorage.getItem(LS) || "{}") || {}; } catch (e) { status = {}; }
+const save = () => { try { localStorage.setItem(LS, JSON.stringify(status)); } catch (e) {} };
+
+let chapters = new Set(Object.keys(KAP).map(Number));
+let filter = "alle";
+let shuffled = false;
+let deck = [];
+let pos = 0;
+let flipped = false;
+let view = "kort";
+
+const $ = id => document.getElementById(id);
+
+function buildChips() {
+  const el = $("chips");
+  const allBtn = document.createElement("button");
+  allBtn.className = "chip"; allBtn.id = "chip-alle";
+  allBtn.innerHTML = `Alle <span class="n">${DATA.length}</span>`;
+  allBtn.onclick = () => { chapters = new Set(Object.keys(KAP).map(Number)); rebuild(); };
+  el.appendChild(allBtn);
+  Object.entries(KAP).forEach(([k, name]) => {
+    const n = DATA.filter(d => d.k == k).length;
+    const b = document.createElement("button");
+    b.className = "chip"; b.dataset.k = k; b.id = "chip-" + k;
+    b.title = name;
+    b.innerHTML = `${k}. ${name} <span class="n">${n}</span>`;
+    b.onclick = () => {
+      const all = chapters.size === Object.keys(KAP).length;
+      if (all) chapters = new Set([+k]);
+      else if (chapters.has(+k)) { chapters.delete(+k); if (!chapters.size) chapters = new Set(Object.keys(KAP).map(Number)); }
+      else chapters.add(+k);
+      rebuild();
+    };
+    el.appendChild(b);
+  });
+}
+
+function shuffleArr(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+function rebuild(keepPos) {
+  deck = DATA.filter(d => chapters.has(d.k)).filter(d =>
+    filter === "alle" ? true : filter === "ov" ? status[d.id] === "ov" : !status[d.id]
+  ).map(d => d.id);
+  if (shuffled) shuffleArr(deck);
+  if (!keepPos) pos = 0;
+  flipped = false;
+  renderControls();
+  render();
+}
+
+function renderControls() {
+  const all = chapters.size === Object.keys(KAP).length;
+  $("chip-alle").setAttribute("aria-pressed", all);
+  Object.keys(KAP).forEach(k => $("chip-" + k).setAttribute("aria-pressed", !all && chapters.has(+k)));
+  ["alle", "ov", "ny"].forEach(f => $("f-" + f).setAttribute("aria-pressed", filter === f));
+  $("shuffle").textContent = shuffled ? "Stokk igjen" : "Stokk";
+  $("order").hidden = !shuffled;
+  $("v-kort").setAttribute("aria-pressed", view === "kort");
+  $("v-liste").setAttribute("aria-pressed", view === "liste");
+  $("kortvisning").hidden = view !== "kort";
+  $("listevisning").hidden = view !== "liste";
+
+  // progress over selected chapters
+  const sel = DATA.filter(d => chapters.has(d.k));
+  const k = sel.filter(d => status[d.id] === "kan").length;
+  const o = sel.filter(d => status[d.id] === "ov").length;
+  const n = sel.length;
+  $("bar-k").style.width = (n ? k / n * 100 : 0) + "%";
+  $("bar-o").style.width = (n ? o / n * 100 : 0) + "%";
+  $("stats").innerHTML =
+    `<span><span class="dot" style="background:var(--ok)"></span>Kan ${k}</span>` +
+    `<span><span class="dot" style="background:var(--warn)"></span>Øv mer ${o}</span>` +
+    `<span><span class="dot" style="background:var(--line)"></span>Ikke vurdert ${n - k - o}</span>` +
+    `<span>av ${n} spørsmål</span>`;
+}
+
+function pill(id) {
+  if (status[id] === "kan") return `<span class="status-pill kan">KAN</span>`;
+  if (status[id] === "ov") return `<span class="status-pill ov">ØV MER</span>`;
+  return "";
+}
+
+function render() {
+  if (view === "liste") return renderList();
+  const card = $("card");
+  const acts = $("actions");
+  if (!deck.length) {
+    card.className = "card done";
+    card.innerHTML = `<h2>Ingen kort her</h2><p>${filter === "ov" ? "Du har ingen kort merket «Øv mer» i disse kapitlene." : "Alle kortene i dette utvalget er vurdert."}</p>
+      <div class="row" style="justify-content:center"><button class="btn" data-go="alle">Vis alle kort</button></div>`;
+    acts.hidden = true; $("counter").textContent = "";
+    return;
+  }
+  if (pos >= deck.length) {
+    const ids = deck;
+    const k = ids.filter(i => status[i] === "kan").length;
+    const o = ids.filter(i => status[i] === "ov").length;
+    card.className = "card done";
+    card.innerHTML = `<h2>Runden er ferdig</h2>
+      <p>${k} kan · ${o} øv mer · ${ids.length - k - o} ikke vurdert</p>
+      <div class="row" style="justify-content:center">
+        ${o ? `<button class="btn" data-go="ov">Øv på de ${o} du ikke kan</button>` : ""}
+        <button class="btn" data-go="restart">Ta runden på nytt</button>
+      </div>`;
+    acts.hidden = true; $("counter").textContent = `${deck.length} / ${deck.length}`;
+    return;
+  }
+  acts.hidden = false;
+  const d = DATA[deck[pos]];
+  const chap = `Kap. ${d.k} · ${KAP[d.k]}`;
+  if (!flipped) {
+    card.className = "card";
+    card.innerHTML = `<div class="top"><span class="side">Spørsmål</span><span class="chap">${chap}</span></div>
+      <div class="q">${d.q}</div>
+      <div class="hint">Trykk på kortet for å se svaret ${pill(d.id)}</div>`;
+  } else {
+    card.className = "card back";
+    card.innerHTML = `<div class="top"><span class="side">Svar</span><span class="chap">${chap}</span></div>
+      <div class="qsmall">${d.q}</div>
+      <div class="a">${d.a}</div>`;
+  }
+  $("prev").disabled = pos === 0;
+  $("counter").textContent = `${pos + 1} / ${deck.length}`;
+}
+
+function renderList() {
+  const list = $("list");
+  list.innerHTML = "";
+  $("listcount").textContent = `${deck.length} spørsmål`;
+  deck.forEach(id => {
+    const d = DATA[id];
+    const det = document.createElement("details");
+    det.className = "item";
+    det.innerHTML = `<summary><span class="t">${d.q}</span><span class="c">Kap. ${d.k}</span>${pill(d.id)}</summary>
+      <div class="body a">${d.a}</div>`;
+    list.appendChild(det);
+  });
+}
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function flip() {
+  if (!deck.length || pos >= deck.length) return;
+  const card = $("card");
+  if (reduce) { flipped = !flipped; render(); return; }
+  card.classList.add("turn");
+  setTimeout(() => { flipped = !flipped; render(); const c = $("card"); c.classList.add("turn"); requestAnimationFrame(() => requestAnimationFrame(() => c.classList.remove("turn"))); }, 160);
+}
+function go(delta) {
+  const np = pos + delta;
+  if (np < 0 || np > deck.length) return;
+  pos = np; flipped = false; render();
+}
+function mark(s) {
+  if (!deck.length || pos >= deck.length) return;
+  status[deck[pos]] = s; save();
+  renderControls();
+  go(1);
+}
+
+// ---- events ----
+$("card").addEventListener("click", e => {
+  const g = e.target.closest("[data-go]");
+  if (g) {
+    e.stopPropagation();
+    const v = g.dataset.go;
+    if (v === "restart") { pos = 0; flipped = false; if (shuffled) shuffleArr(deck); render(); }
+    else { filter = v; rebuild(); }
+    return;
+  }
+  flip();
+});
+$("card").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); flip(); } });
+$("prev").onclick = () => go(-1);
+$("next").onclick = () => go(1);
+$("m-ov").onclick = () => mark("ov");
+$("m-kan").onclick = () => mark("kan");
+$("f-alle").onclick = () => { filter = "alle"; rebuild(); };
+$("f-ov").onclick = () => { filter = "ov"; rebuild(); };
+$("f-ny").onclick = () => { filter = "ny"; rebuild(); };
+$("shuffle").onclick = () => { shuffled = true; rebuild(); };
+$("order").onclick = () => { shuffled = false; rebuild(); };
+$("v-kort").onclick = () => { view = "kort"; renderControls(); render(); };
+$("v-liste").onclick = () => { view = "liste"; renderControls(); render(); };
+$("openall").onclick = () => document.querySelectorAll("#list details").forEach(d => d.open = true);
+$("closeall").onclick = () => document.querySelectorAll("#list details").forEach(d => d.open = false);
+
+function resetUI() {
+  const w = $("reset-wrap");
+  w.innerHTML = `<span class="confirm">Slette all fremgang? <button class="btn" id="r-yes">Ja, nullstill</button><button class="btn quiet" id="r-no">Avbryt</button></span>`;
+  $("r-yes").onclick = () => { status = {}; save(); restoreReset(); rebuild(); };
+  $("r-no").onclick = restoreReset;
+}
+function restoreReset() {
+  $("reset-wrap").innerHTML = `<button class="btn quiet" id="reset">Nullstill fremgang</button>`;
+  $("reset").onclick = resetUI;
+}
+$("reset").onclick = resetUI;
+
+document.addEventListener("keydown", e => {
+  if (view !== "kort" || e.target.closest("input, textarea")) return;
+  if (e.key === " " ) { if (e.target.tagName === "BUTTON" && e.target.id !== "card") return; e.preventDefault(); flip(); }
+  else if (e.key === "ArrowRight") go(1);
+  else if (e.key === "ArrowLeft") go(-1);
+  else if (e.key === "1") mark("ov");
+  else if (e.key === "2") mark("kan");
+});
+
+buildChips();
+rebuild();
+</script>
+</body>
+</html>
